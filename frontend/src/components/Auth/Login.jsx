@@ -17,7 +17,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         "http://localhost:4000/api/v1/user/login",
         { email, password, role },
         {
@@ -27,13 +27,28 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      toast.success(data.message);
-      setEmail("");
-      setPassword("");
-      setRole("");
-      setIsAuthorized(true);
+      
+      if (response.data) {
+        toast.success(response.data.message);
+        setEmail("");
+        setPassword("");
+        setRole("");
+        setIsAuthorized(true);
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
     } catch (error) {
-      toast.error(error.response.data.message);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        toast.error(error.response.data.message || "Login failed. Please try again.");
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error("No response from server. Please check if the server is running.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error("Error setting up the request. Please try again.");
+      }
     }
   };
 
@@ -49,11 +64,11 @@ const Login = () => {
             <img src="/JobZeelogo.png" alt="logo" />
             <h3>Login to your account</h3>
           </div>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="inputTag">
               <label>Login As</label>
               <div>
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <select value={role} onChange={(e) => setRole(e.target.value)} required>
                   <option value="">Select Role</option>
                   <option value="Employer">Employer</option>
                   <option value="Job Seeker">Job Seeker</option>
@@ -69,6 +84,7 @@ const Login = () => {
                   placeholder="zk@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <MdOutlineMailOutline />
               </div>
@@ -81,13 +97,12 @@ const Login = () => {
                   placeholder="Your Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
                 <RiLock2Fill />
               </div>
             </div>
-            <button type="submit" onClick={handleLogin}>
-              Login
-            </button>
+            <button type="submit">Login</button>
             <Link to={"/register"}>Register Now</Link>
           </form>
         </div>
