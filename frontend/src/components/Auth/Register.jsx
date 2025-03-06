@@ -8,6 +8,7 @@ import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
+import { API_BASE_URL, ENDPOINTS } from "../../config/config";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://job-seeking-backend-peel.onrender.com/api/v1/user/register",
+        `${API_BASE_URL}${ENDPOINTS.REGISTER}`,
         { name, phone, email, role, password },
         {
           headers: {

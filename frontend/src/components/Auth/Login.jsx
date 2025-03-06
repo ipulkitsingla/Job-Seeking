@@ -6,6 +6,7 @@ import { FaRegUser } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
+import { API_BASE_URL, ENDPOINTS } from "../../config/config";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://job-seeking-backend-peel.onrender.com/api/v1/user/login",
+        `${API_BASE_URL}${ENDPOINTS.LOGIN}`,
         { email, password, role },
         {
           headers: {

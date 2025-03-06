@@ -16,6 +16,7 @@ import MyApplications from "./components/Application/MyApplications";
 import PostJob from "./components/Job/PostJob";
 import NotFound from "./components/NotFound/NotFound";
 import MyJobs from "./components/Job/MyJobs";
+import { API_BASE_URL, ENDPOINTS } from "./config/config";
 
 const App = () => {
   const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
@@ -23,7 +24,7 @@ const App = () => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          "https://job-seeking-backend-peel.onrender.com/api/v1/user/getuser",
+          `${API_BASE_URL}${ENDPOINTS.GET_USER}`,
           {
             withCredentials: true,
           }
